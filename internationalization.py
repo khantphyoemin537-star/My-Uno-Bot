@@ -32,7 +32,7 @@ GETTEXT_DIR = 'locales'
 
 class _Underscore(object):
     """Class to emulate flufl.i18n behaviour, but with plural support"""
-     def __init__(self):
+    def __init__(self):
         self.translators = {}
         for locale in available_locales.keys():
             if locale == 'en_US':
@@ -41,14 +41,14 @@ class _Underscore(object):
             # File လမ်းကြောင်းကို အရင်ရှာမယ်
             filepath = gettext.find(GETTEXT_DOMAIN, GETTEXT_DIR, languages=[locale])
             
-            # ဖိုင်တွေ့မှပဲ open လုပ်မယ်
+            # File တကယ်ရှိမှပဲ open လုပ်မယ် (Error မတက်တော့ဘူး)
             if filepath:
                 self.translators[locale] = gettext.GNUTranslations(open(filepath, 'rb'))
             else:
+                # File မတွေ့ရင် ဒီနေရာမှာ Log တက်လိမ့်မယ်
                 print(f"Warning: Translation file for '{locale}' not found at {GETTEXT_DIR}")
                 
         self.locale_stack = list()
-  
 
     def push(self, locale):
         self.locale_stack.append(locale)
