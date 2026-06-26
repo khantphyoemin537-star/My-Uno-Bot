@@ -38,6 +38,21 @@ from simple_commands import help_handler
 from start_bot import start_bot
 from utils import display_name
 from utils import send_async, answer_async, error, TIMEOUT, user_is_creator_or_admin, user_is_creator, game_is_running
+from http.server import HTTPServer, BaseHTTPRequestHandler
+from threading import Thread
+
+# Web server အတုလေးတစ်ခု ဆောက်မယ်
+def run_dummy_server():
+    class Handler(BaseHTTPRequestHandler):
+        def do_GET(self):
+            self.send_response(200)
+            self.end_headers()
+            self.wfile.write(b"Bot is running")
+    
+    # Render ပေးထားတဲ့ Port ကို သုံးမယ် (မရှိရင် 8080 ကို သုံးမယ်)
+    port = int(os.environ.get("PORT", 8080))
+    server = HTTPServer(("0.0.0.0", port), Handler)
+    server.serve_forever()
 
 
 logging.basicConfig(
@@ -736,6 +751,7 @@ dispatcher.add_handler(MessageHandler(Filters.status_update, status_update))
 dispatcher.add_error_handler(error)
 from database import db
 db.generate_mapping(create_tables=True)
+Thread(target=run_dummy_server, daemon=True).start()
 start_bot(updater)
 updater.idle()
 
