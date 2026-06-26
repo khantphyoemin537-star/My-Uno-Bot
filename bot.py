@@ -734,7 +734,8 @@ simple_commands.register()
 settings.register()
 dispatcher.add_handler(MessageHandler(Filters.status_update, status_update))
 dispatcher.add_error_handler(error)
-
+from database import db
+db.generate_mapping(create_tables=True)
 start_bot(updater)
 updater.idle()
 
