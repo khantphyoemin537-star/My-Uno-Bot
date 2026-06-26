@@ -8,17 +8,37 @@
 # it under the terms of the GNU Affero General Public License as
 # published by the Free Software Foundation, either version 3 of the
 # License, or (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-# GNU Affero General Public License for more details.
-#
-# You should have received a copy of the GNU Affero General Public License
-# along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 import logging
 from datetime import datetime
+import os
+
+# ====================================================================================
+# 🌐 AUTOMATIC LANGUAGE CODES COMPILER (PO TO MO) FOR RENDER
+# ====================================================================================
+try:
+    import polib
+    print("🌐 Language Compiler: Scanning for .po localization files...")
+    compiled_count = 0
+    
+    # Project folder ထဲက .po ဖိုင်အားလုံးကို အော်တိုလိုက်ရှာပြီး .mo ပြောင်းပေးမည့်စနစ်
+    for root, dirs, files in os.walk('.'):
+        for file in files:
+            if file.endswith('.po'):
+                po_path = os.path.join(root, file)
+                mo_path = po_path[:-3] + '.mo' # .po နေရာမှာ .mo ပြောင်းပစ်တာ
+                try:
+                    po = polib.pofile(po_path)
+                    po.save_as_mo(mo_path)
+                    print(f"✅ Compiled Successfully: {po_path} ➡️ {mo_path}")
+                    compiled_count += 1
+                except Exception as e:
+                    print(f"❌ Error compiling {po_path}: {e}")
+                    
+    print(f"🎯 Language System Grid: {compiled_count} files compiled! Ready to play! ✔️")
+except ImportError:
+    print("⚠️ Warning: 'polib' not installed. Please add 'polib' to requirements.txt")
+# ====================================================================================
 
 from telegram import ParseMode, InlineKeyboardMarkup, \
     InlineKeyboardButton, Update
@@ -741,3 +761,4 @@ dispatcher.add_error_handler(error)
 
 start_bot(updater)
 updater.idle()
+
