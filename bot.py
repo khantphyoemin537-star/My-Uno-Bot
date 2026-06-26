@@ -27,13 +27,15 @@ try:
             if file.endswith('.po'):
                 po_path = os.path.join(root, file)
                 mo_path = po_path[:-3] + '.mo' # .po နေရာမှာ .mo ပြောင်းပစ်တာ
+                # အဟောင်းနေရာမှာ အောက်ပါအတိုင်း အစားထိုးပါ
                 try:
                     po = polib.pofile(po_path)
-                    po.save_as_mo(mo_path)
+                    po.save_as_mofile(mo_path) # save_as_mo ကို save_as_mofile လို့ ပြင်ပါ
                     print(f"✅ Compiled Successfully: {po_path} ➡️ {mo_path}")
                     compiled_count += 1
                 except Exception as e:
                     print(f"❌ Error compiling {po_path}: {e}")
+             
                     
     print(f"🎯 Language System Grid: {compiled_count} files compiled! Ready to play! ✔️")
 except ImportError:
