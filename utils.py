@@ -22,7 +22,7 @@ import logging
 from telegram import Update
 from telegram.ext import CallbackContext
 
-from internationalization import _, __
+#from internationalization import _, __
 from mwt import MWT
 from shared_vars import gm, dispatcher
 
